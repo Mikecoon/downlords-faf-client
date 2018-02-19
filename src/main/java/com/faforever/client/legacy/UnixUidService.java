@@ -1,12 +1,16 @@
 package com.faforever.client.legacy;
 
 import com.faforever.client.os.OsUtils;
+import com.google.common.collect.Sets;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
 
 
 @Lazy
@@ -17,6 +21,7 @@ public class UnixUidService implements UidService {
   @Override
   public String generate(String sessionId, Path logFile) throws IOException {
     String uidDir = System.getProperty("nativeDir", "lib");
+    Files.setPosixFilePermissions(Paths.get(uidDir, "/faf-uid"), Sets.immutableEnumSet(PosixFilePermission.OTHERS_READ));
     return OsUtils.execAndGetOutput(String.format("%s/faf-uid %s", uidDir, sessionId));
   }
 }

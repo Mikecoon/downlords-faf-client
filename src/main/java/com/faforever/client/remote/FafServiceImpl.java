@@ -167,8 +167,8 @@ public class FafServiceImpl implements FafService {
 
   @Override
   @Async
-  public CompletableFuture<Mod> getMod(String uid) {
-    return CompletableFuture.completedFuture(Mod.fromModDto(fafApiAccessor.getMod(uid)));
+  public CompletableFuture<com.faforever.client.mod.ModVersion> getModVersion(String uid) {
+    return CompletableFuture.completedFuture(com.faforever.client.mod.ModVersion.fromDto(fafApiAccessor.getModVersion(uid)));
   }
 
   @Override

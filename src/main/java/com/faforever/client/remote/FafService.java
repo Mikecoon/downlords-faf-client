@@ -16,6 +16,7 @@ import com.faforever.client.leaderboard.LeaderboardEntry;
 import com.faforever.client.map.MapBean;
 import com.faforever.client.mod.FeaturedMod;
 import com.faforever.client.mod.Mod;
+import com.faforever.client.mod.ModVersion;
 import com.faforever.client.net.ConnectionState;
 import com.faforever.client.player.Player;
 import com.faforever.client.remote.domain.GameLaunchMessage;
@@ -75,7 +76,7 @@ public interface FafService {
 
   CompletableFuture<List<Mod>> getMods();
 
-  CompletableFuture<Mod> getMod(String uid);
+  CompletableFuture<ModVersion> getModVersion(String uid);
 
   void reconnect();
 

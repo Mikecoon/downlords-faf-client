@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface ModService {
 
-  void loadInstalledMods();
+  CompletableFuture<Void> loadInstalledMods();
 
   ObservableList<Mod> getInstalledMods();
 
@@ -30,6 +30,8 @@ public interface ModService {
   CompletableFuture<Void> downloadAndInstallMod(URL url, DoubleProperty progressProperty, StringProperty titleProperty);
 
   CompletableFuture<Void> downloadAndInstallMod(Mod mod, DoubleProperty progressProperty, StringProperty titleProperty);
+
+  CompletableFuture<Void> downloadAndInstallMod(ModVersion mod, DoubleProperty progressProperty, StringProperty titleProperty);
 
   Set<String> getInstalledModUids();
 

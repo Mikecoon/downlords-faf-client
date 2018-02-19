@@ -282,11 +282,10 @@ public class FafApiAccessorImpl implements FafApiAccessor {
   }
 
   @Override
-  public Mod getMod(String uid) {
-    List<ModVersion> answer = getMany("/data/modVersion/", 1, ImmutableMap.of(
-        "filter", rsql(qBuilder().string("uid").eq(uid)),
-        "include", "mod,mod.latestVersion,latestVersion.reviewsSummary"));
-    return answer.get(0).getMod();
+  public ModVersion getModVersion(String uid) {
+    return (ModVersion) getMany("/data/modVersion", 1,
+        ImmutableMap.of("filter", rsql(qBuilder().string("uid").eq(uid)), "include", "mod,mod.latestVersion")
+    ).get(0);
   }
 
   @Override

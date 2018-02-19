@@ -163,7 +163,7 @@ public class ModServiceImpl implements ModService {
   }
 
   @Override
-  public void loadInstalledMods() {
+  public CompletableFuture<Void> loadInstalledMods() {
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modsDirectory, entry -> Files.isDirectory(entry))) {
       for (Path path : directoryStream) {
         addMod(path);
@@ -171,6 +171,7 @@ public class ModServiceImpl implements ModService {
     } catch (IOException e) {
       logger.warn("Mods could not be read from: " + modsDirectory, e);
     }
+    return completedFuture(null);
   }
 
   @Override
@@ -181,7 +182,12 @@ public class ModServiceImpl implements ModService {
   @SneakyThrows
   @Override
   public CompletableFuture<Void> downloadAndInstallMod(String uid) {
-    return fafService.getMod(uid).thenAccept(mod -> downloadAndInstallMod(mod, null, null));
+    return fafService.getModVersion(uid)
+        .thenCompose(mod -> downloadAndInstallMod(mod, null, null))
+        .exceptionally(throwable -> {
+          logger.warn("Sim mod was not installed", throwable);
+          return null;
+        });
   }
 
   @Override
@@ -201,12 +207,17 @@ public class ModServiceImpl implements ModService {
     }
 
     return taskService.submitTask(task).getFuture()
-        .thenAccept(aVoid -> loadInstalledMods());
+        .thenCompose(aVoid -> loadInstalledMods());
   }
 
   @Override
   public CompletableFuture<Void> downloadAndInstallMod(Mod mod, @Nullable DoubleProperty progressProperty, StringProperty titleProperty) {
     return downloadAndInstallMod(mod.getDownloadUrl(), progressProperty, titleProperty);
+  }
+
+  @Override
+  public CompletableFuture<Void> downloadAndInstallMod(ModVersion modVersion, @Nullable DoubleProperty progressProperty, StringProperty titleProperty) {
+    return downloadAndInstallMod(modVersion.getDownloadUrl(), progressProperty, titleProperty);
   }
 
   @Override
