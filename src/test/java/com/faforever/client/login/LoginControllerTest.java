@@ -7,7 +7,6 @@ import com.faforever.client.preferences.Preferences;
 import com.faforever.client.preferences.PreferencesService;
 import com.faforever.client.test.AbstractPlainJavaFxTest;
 import com.faforever.client.user.UserService;
-import javafx.event.ActionEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -60,21 +59,21 @@ public class LoginControllerTest extends AbstractPlainJavaFxTest {
 
     when(userService.login(anyString(), anyString(), anyBoolean())).thenReturn(CompletableFuture.completedFuture(null));
 
-    instance.loginButtonClicked();
+    instance.onLoginButtonClicked();
 
     verify(userService).login("JUnit", "password", true);
   }
 
   @Test
   public void testCreateAccountButtton() throws Exception {
-    instance.createNewAccountClicked(new ActionEvent());
+    instance.createNewAccountClicked();
 
     verify(platformService).showDocument("create");
   }
 
   @Test
   public void testForgotPasswordButtton() throws Exception {
-    instance.forgotLoginClicked(new ActionEvent());
+    instance.forgotLoginClicked();
 
     verify(platformService).showDocument("forgot");
   }
