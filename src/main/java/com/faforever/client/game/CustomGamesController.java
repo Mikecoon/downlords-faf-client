@@ -133,7 +133,7 @@ public class CustomGamesController implements Controller<Node> {
   }
 
   public void onCreateGameButtonClicked() {
-    if (preferencesService.getPreferences().getForgedAlliance().getPath() == null) {
+    if (preferencesService.getPreferences().getForgedAlliance().getExecutablePath() == null) {
       CompletableFuture<Path> gameDirectoryFuture = new CompletableFuture<>();
       eventBus.post(new GameDirectoryChooseEvent(gameDirectoryFuture));
       gameDirectoryFuture.thenAccept(path -> Optional.ofNullable(path).ifPresent(path1 -> onCreateGameButtonClicked()));
