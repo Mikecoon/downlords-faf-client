@@ -30,6 +30,8 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -228,6 +230,12 @@ public class ChatUserContextMenuController implements Controller<ContextMenu> {
 
   public void onSendPrivateMessage() {
     eventBus.post(new InitiatePrivateChatEvent(player.getUsername()));
+  }
+
+  public void onCopyUsername() {
+    ClipboardContent clipboardContent = new ClipboardContent();
+    clipboardContent.putString(player.getUsername());
+    Clipboard.getSystemClipboard().setContent(clipboardContent);
   }
 
   public void onAddFriend() {
