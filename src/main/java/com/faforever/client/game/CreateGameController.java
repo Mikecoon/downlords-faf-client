@@ -394,4 +394,14 @@ public class CreateGameController implements Controller<Pane> {
   public void onContentPaneClicked(MouseEvent event) {
     event.consume();
   }
+
+  public boolean selectMap(String mapFolderName) {
+    Optional<MapBean> mapBeanOptional = mapListView.getItems().stream().filter(mapBean -> mapBean.getFolderName().equalsIgnoreCase(mapFolderName)).findAny();
+    if (!mapBeanOptional.isPresent()) {
+      return false;
+    }
+    mapListView.getSelectionModel().select(mapBeanOptional.get());
+    mapListView.scrollTo(mapBeanOptional.get());
+    return true;
+  }
 }
