@@ -5,19 +5,19 @@ import com.faforever.client.player.Player;
 import lombok.Getter;
 
 @Getter
-public class FriendJoinedGameEvent {
+public class FollowedPlayerJoinedGameEvent {
   private Player player;
   private Game game;
 
-  public FriendJoinedGameEvent(Player player, Game game) {
+  public FollowedPlayerJoinedGameEvent(Player player, Game game) {
     this.player = player;
     this.game = game;
   }
 
   @Override
   public boolean equals(Object obj) {
-    return (obj instanceof FriendJoinedGameEvent)
-        && ((FriendJoinedGameEvent) obj).player.equals(player)
-        && ((FriendJoinedGameEvent) obj).game.equals(game);
+    return (obj instanceof FollowedPlayerJoinedGameEvent)
+        && ((FollowedPlayerJoinedGameEvent) obj).player.equals(player)
+        && ((FollowedPlayerJoinedGameEvent) obj).game.equals(game);
   }
 }

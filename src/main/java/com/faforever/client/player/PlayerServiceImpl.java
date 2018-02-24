@@ -8,6 +8,7 @@ import com.faforever.client.game.Game;
 import com.faforever.client.game.GameAddedEvent;
 import com.faforever.client.game.GameRemovedEvent;
 import com.faforever.client.game.GameUpdatedEvent;
+import com.faforever.client.player.event.FollowedPlayerJoinedGameEvent;
 import com.faforever.client.player.event.FriendJoinedGameEvent;
 import com.faforever.client.remote.FafService;
 import com.faforever.client.remote.domain.GameStatus;
@@ -55,6 +56,9 @@ public class PlayerServiceImpl implements PlayerService {
   private final UserService userService;
   private final EventBus eventBus;
 
+  //  private Optional<Player> followedPlayer = Optional.empty();
+  private final ObjectProperty<Player> followedPlayer;
+
   @Inject
   public PlayerServiceImpl(FafService fafService, UserService userService, EventBus eventBus) {
     this.fafService = fafService;
@@ -66,6 +70,7 @@ public class PlayerServiceImpl implements PlayerService {
     friendList = new ArrayList<>();
     foeList = new ArrayList<>();
     currentPlayer = new SimpleObjectProperty<>();
+    followedPlayer = new SimpleObjectProperty(null);
   }
 
   @PostConstruct
@@ -143,8 +148,13 @@ public class PlayerServiceImpl implements PlayerService {
           resetIdleTime(player);
           if (game == null) {
             player.setGame(null);
-          } else if ((player.getGame() == null || !player.getGame().equals(game)) && player.getSocialStatus() == FRIEND && game.getStatus() == GameStatus.OPEN) {
-            eventBus.post(new FriendJoinedGameEvent(player, game));
+          } else if ((player.getGame() == null || !player.getGame().equals(game)) && game.getStatus() == GameStatus.OPEN) {
+            if (player.getSocialStatus() == FRIEND) {
+              eventBus.post(new FriendJoinedGameEvent(player, game));
+            }
+            Optional.ofNullable(this.followedPlayer.get()).filter(p -> p == player).ifPresent(p -> {
+              eventBus.post(new FollowedPlayerJoinedGameEvent(player, game));
+            });
           }
           player.setGame(game);
         });
@@ -225,6 +235,20 @@ public class PlayerServiceImpl implements PlayerService {
   }
 
   @Override
+  public void followPlayer(Player player) {
+    followedPlayer.set(player);
+
+    if (player.getGame() != null && player.getGame().getStatus() == GameStatus.OPEN) {
+      eventBus.post(new FollowedPlayerJoinedGameEvent(player, player.getGame()));
+    }
+  }
+
+  @Override
+  public void stopFollowing() {
+    followedPlayer.set(null);
+  }
+
+  @Override
   public Optional<Player> getCurrentPlayer() {
     return Optional.ofNullable(currentPlayer.get());
   }
@@ -288,5 +312,13 @@ public class PlayerServiceImpl implements PlayerService {
 
       playerInfoBean.updateFromPlayerInfo(player);
     }
+  }
+
+  public Player getFollowedPlayer() {
+    return followedPlayer.get();
+  }
+
+  public ObjectProperty<Player> followedPlayerProperty() {
+    return followedPlayer;
   }
 }
