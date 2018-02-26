@@ -40,7 +40,6 @@ a {
 .compact {
   overflow: hidden;
   padding: 0.1em;
-  /* Same color as -divider-color */
   border-bottom: none;
 }
 
@@ -137,29 +136,32 @@ img.country-flag[src=""] {
   color: #FFA500;
 }
 
+/* For compact chat mode */
 table {
-width:100%
+  width: 100%
 }
 
 td#text {
-width:99%;
+  width: 99%;
 }
 
 td#author {
-width: 13.5em;
-text-align: right;
+  width: 18ch;
+  text-align: right;
 }
+
 td#avatar {
-width: 44px;
+  width: 44px;
 }
+
 td#flag {
-width: 20px;
+  width: 16px;
 }
 
 td#time {
-width:40px;
-padding:1em;
-text-align:right;
+  width: 40px;
+  padding: 1em;
+  text-align: right;
 }
 
 /***************** News (WebView) *****************/

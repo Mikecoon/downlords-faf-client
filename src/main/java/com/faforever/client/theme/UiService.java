@@ -35,6 +35,7 @@ public interface UiService {
   String CHAT_ENTRY = "theme/chat/chat_section.html";
   String CHAT_ENTRY_COMPACT = "theme/chat/chat_section_compact.html";
   String CHAT_TEXT = "theme/chat/chat_text.html";
+  String COMPACT_CHAT_TEXT = "theme/chat/chat_text_compact.html";
 
   Theme DEFAULT_THEME = new Theme() {
     {
